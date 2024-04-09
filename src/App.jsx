@@ -1,21 +1,22 @@
-import React from 'react';
-// import Scene from './components/Canvas';
+import React, { useState } from 'react';
+
 import NewScene from './components/newCanvas';
+import ToolBox from './components/Toolbox';
 
-
-
-// function App() {
-//   return (
-//     <div style={{ height: '100vh' ,width:'100vw'}}>
-//       <Scene />
-//     </div>
-//   );
-// }
 function App() {
+  const [tool,setTool]=useState("");
+
+  const handleTool=(value)=>{
+    setTool(value);
+  }
+
   return (
-    <div className="App">
-      <NewScene />
+    <>
+    <div id="scene">
+      <NewScene shape={tool}/>
+      <ToolBox handleTool={handleTool}/>
     </div>
+    </>
   );
 }
 
