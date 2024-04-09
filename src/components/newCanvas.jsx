@@ -39,14 +39,14 @@ export default function NewScene({shape}) {
 
   return (
     <>
-    <Canvas style={{ background: '#FEFEFE', width: '100vw', height: '100vh' }} onPointerMissed={handlePointerMissed}>
-      <PerspectiveCamera ref={cameraRef} makeDefault position={[6, 8, 14]} />
+    <Canvas style={{ background: '#FEFEFE', width: '100vw', height: '85vh' }} onPointerMissed={handlePointerMissed}>
+      <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 10, 0]} />
       {posCordinates.length > 0 && posCordinates.map((posCordinate, index) => (
           <Shapes key={index} posCoordinate={posCordinate} type={posCordinate[3]} />
       ))}
        <ambientLight />
       <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}  >
-        <planeGeometry args={[20, 20, 1, 1]} />
+        <planeGeometry args={[10,10 ]} />
         <meshStandardMaterial map={new TextureLoader().load(maptile)} />
       </mesh>
       <OrbitControls ref={orbitRef} />

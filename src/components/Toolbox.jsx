@@ -8,7 +8,7 @@ const ToolBox = ({handleTool}) => {
   };
 
   return (
-    <div id="controls" className="flex justify-center w-[100vw] mt-4 gap-x-4">
+    <div id="controls" className="flex justify-center  gap-x-4 ">
       <button onClick={() => handleButtonClick('Sphere')}>Sphere</button>
       <button onClick={() => handleButtonClick('Box')}>Box</button>  
       <button onClick={() => handleButtonClick('Octahedral')}>Octahedral</button>
