@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 const Shapes = ({ type, index, posCoordinate }) => {
   const geometry = useMemo(() => {
     if (type === "Sphere") {
-      return new SphereGeometry(0.3, 32, 32);
+      return new SphereGeometry(0.2, 32, 32);
     } else if (type === "Box") {
       return new BoxGeometry(0.3, 0.3, 0.3);
     } else if (type === "Octahedral") {

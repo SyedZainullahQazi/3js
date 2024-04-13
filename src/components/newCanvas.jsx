@@ -23,9 +23,12 @@ export default function NewScene({shape}) {
   const handlePointerMissed = (event) => {
     if(shape){
     const canvas = event.target;
-    mouse.x = (event.clientX / canvas.clientWidth) * 2 - 1;
-    mouse.y = -(event.clientY / canvas.clientHeight) * 2 + 1;
+    console.log(event);
+    console.log(event.clientX,event.clientY);
+    mouse.x = (event.offsetX  / canvas.clientWidth) * 2 - 1;
+    mouse.y = -(event.offsetY / canvas.clientHeight) * 2 + 1;
 
+    console.log(mouse);
     planeNormal.copy(cameraRef.current.position).normalize();
     plane.setFromNormalAndCoplanarPoint(planeNormal, new Vector3(0, 0, 0));
     raycaster.setFromCamera(mouse, cameraRef.current);

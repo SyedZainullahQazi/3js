@@ -12,14 +12,14 @@ function App() {
 
   return (
     <>
-    
-    <div id="scene" className="flex justify-center">
-      <NewScene shape={tool}/>
-      
-    </div>
-    <div className="w-[auto] h-[auto] m-4  overflow-x-hidden">
+    <div className="w-[auto] h-[auto] m-4  overflow-hidden">
     <ToolBox handleTool={handleTool}/>
     </div>
+    <div id="scene" className="flex justify-center w-[100vw] h-[85vh] overflow-hidden">
+      <NewScene shape={tool}/>
+    </div>
+    
+    
     </>
   );
 }
