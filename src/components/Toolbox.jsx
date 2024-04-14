@@ -4,7 +4,6 @@ const ToolBox = ({handleTool}) => {
 
   const handleButtonClick = (value) => {
     handleTool(value);
-    console.log(value);
   };
 
   return (

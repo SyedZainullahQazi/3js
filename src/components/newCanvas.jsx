@@ -19,16 +19,14 @@ export default function NewScene({shape}) {
 
   const orbitRef = useRef();
   const cameraRef = useRef();
+  const canvasRef=useRef();
 
   const handlePointerMissed = (event) => {
     if(shape){
-    const canvas = event.target;
-    console.log(event);
-    console.log(event.clientX,event.clientY);
+    const canvas = canvasRef.current;
     mouse.x = (event.offsetX  / canvas.clientWidth) * 2 - 1;
     mouse.y = -(event.offsetY / canvas.clientHeight) * 2 + 1;
 
-    console.log(mouse);
     planeNormal.copy(cameraRef.current.position).normalize();
     plane.setFromNormalAndCoplanarPoint(planeNormal, new Vector3(0, 0, 0));
     raycaster.setFromCamera(mouse, cameraRef.current);
@@ -42,10 +40,16 @@ export default function NewScene({shape}) {
 
   return (
     <>
-    <Canvas style={{ background: '#FEFEFE', width: '100vw', height: '85vh' }} onPointerMissed={handlePointerMissed}>
+    <Canvas
+    ref={canvasRef}
+    style={{ background: '#FEFEFE', width: '100vw', height: '85vh' }} 
+    onPointerMissed={handlePointerMissed}
+    >
       <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 10, 0]} />
       {posCordinates.length > 0 && posCordinates.map((posCordinate, index) => (
-          <Shapes key={index} posCoordinate={posCordinate} type={posCordinate[3]} />
+          <Shapes key={index} posCoordinate={posCordinate} type={posCordinate[3]}
+          currCamera={cameraRef.current}
+          currCanvas={canvasRef.current}/>
       ))}
        <ambientLight />
       <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}  >
