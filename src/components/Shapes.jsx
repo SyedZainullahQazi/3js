@@ -61,7 +61,7 @@ const Shapes = ({ type, index, posCoordinate,currCamera,currCanvas}) => {
       onPointerUp={handleMouseUp}
       onPointerMove={handleMouseMove}
     >
-      <meshStandardMaterial />
+      <meshStandardMaterial color={isDragging?"red":"white"} />
     </mesh>
   );
 }
