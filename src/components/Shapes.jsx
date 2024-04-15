@@ -3,10 +3,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGesture } from 'react-use-gesture';
 import { useThree } from '@react-three/fiber';
 
-const Shapes = ({ type, index, posCoordinate,currCamera,currCanvas}) => {
-  // useEffect(()=>{
-  //   console.log(currCamera,currCanvas.clientHeight);
-  // },[])
+const Shapes = ({ type, index, posCoordinate,currCamera,currCanvas,updatedPosition,color}) => {
+ 
+ 
   const geometry = useMemo(() => {
     if (type === "Sphere") {
       return new SphereGeometry(0.2, 32, 32);
@@ -22,14 +21,42 @@ const Shapes = ({ type, index, posCoordinate,currCamera,currCanvas}) => {
   if (!geometry) return null;
   const meshRef = useRef();
   const [isDragging, setIsDragging] = useState(false);
+  const [wantToColor,setWantToColor]=useState(false);
+  const [lastColor,setLastColor]=useState("");
+  
+
+  useEffect(()=>{
+    if(isDragging){
+      meshRef.current.scale.x = updatedPosition.x;
+      meshRef.current.scale.y = Math.abs(updatedPosition.y);
+      meshRef.current.scale.z = updatedPosition.z;
+
+      if (!meshRef.current.geometry.boundingBox){
+        meshRef.current.geometry.computeBoundingBox();
+      }
+      var height = meshRef.current.geometry.boundingBox.max.y - meshRef.current.geometry.boundingBox.min.y;
+      meshRef.current.position.y = height * meshRef.current.scale.y / 2;
+    }
+  },[updatedPosition])
+
+  useEffect(()=>{
+    if(isDragging){
+      console.log("keep swimming")
+      setWantToColor(true);
+    }
+  },[color])
 
   const handleMouseDown = () => {
-    setIsDragging(true);
+    if(isDragging){
+      setLastColor(color)
+    }
+    setIsDragging(!isDragging);
+    
   };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
+  // const handleMouseUp = () => {
+  //   setIsDragging(false);
+  // };
 
   const mouse = new Vector2();
   const intersectionPoint = new Vector3();
@@ -49,19 +76,23 @@ const Shapes = ({ type, index, posCoordinate,currCamera,currCanvas}) => {
       plane.setFromNormalAndCoplanarPoint(planeNormal, new Vector3(0, 0, 0));
       raycaster.setFromCamera(mouse,currCamera);
       raycaster.ray.intersectPlane(plane, intersectionPoint);
-      intersectionPoint.y=0.20;
-      console.log(intersectionPoint)
+      if (!meshRef.current.geometry.boundingBox){
+        meshRef.current.geometry.computeBoundingBox();
+      }
+      var height = meshRef.current.geometry.boundingBox.max.y - meshRef.current.geometry.boundingBox.min.y;
+      intersectionPoint.y = height * meshRef.current.scale.y / 2;
       meshRef.current.position.copy(intersectionPoint);
+
     }
   };
 
   return (
     <mesh key={index} ref={meshRef} position={posCoordinate} geometry={geometry} 
       onPointerDown={handleMouseDown}
-      onPointerUp={handleMouseUp}
+      // onPointerUp={handleMouseUp}
       onPointerMove={handleMouseMove}
     >
-      <meshStandardMaterial color={isDragging?"red":"white"} />
+      <meshStandardMaterial color={isDragging?wantToColor?color:"red":wantToColor?lastColor:"white"} />
     </mesh>
   );
 }
