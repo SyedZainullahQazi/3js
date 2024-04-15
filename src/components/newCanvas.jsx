@@ -8,7 +8,7 @@ import Shapes from './Shapes';
 import maptile from "../tile.jpeg"
 
 
-export default function NewScene({shape}) {
+export default function NewScene({shape,updatedPosition,color}) {
   
   const [posCordinates, setPosCordinates] = useState([]);
   const mouse = new Vector2();
@@ -20,6 +20,11 @@ export default function NewScene({shape}) {
   const orbitRef = useRef();
   const cameraRef = useRef();
   const canvasRef=useRef();
+
+  useEffect(()=>{
+    console.log("called from new canvas");
+    console.log(color)
+  },[color])
 
   const handlePointerMissed = (event) => {
     if(shape){
@@ -34,6 +39,7 @@ export default function NewScene({shape}) {
 
     if(intersectionPoint.y<0.5){intersectionPoint.y=0.5}
     const updatedPost = [...posCordinates, [intersectionPoint.x, intersectionPoint.y, intersectionPoint.z,shape]];
+
     setPosCordinates(updatedPost);
     }
   };
@@ -47,7 +53,11 @@ export default function NewScene({shape}) {
     >
       <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 10, 0]} />
       {posCordinates.length > 0 && posCordinates.map((posCordinate, index) => (
-          <Shapes key={index} posCoordinate={posCordinate} type={posCordinate[3]}
+          <Shapes key={index}
+           posCoordinate={posCordinate} 
+          type={posCordinate[3]} 
+          color={color}
+          updatedPosition={updatedPosition}
           currCamera={cameraRef.current}
           currCanvas={canvasRef.current}/>
       ))}
