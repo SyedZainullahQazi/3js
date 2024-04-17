@@ -1,11 +1,9 @@
 import { SphereGeometry, BoxGeometry, OctahedronGeometry, Vector3, Vector2, Plane, Raycaster } from 'three';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useGesture } from 'react-use-gesture';
-import { useThree } from '@react-three/fiber';
 
-const Shapes = ({ type, index, posCoordinate,currCamera,currCanvas,updatedPosition,color}) => {
- 
- 
+const Shapes = ({ type, index, posCoordinate,id,currCamera,currCanvas,updatedPosition,color,selectedShapeId}) => {
+
+
   const geometry = useMemo(() => {
     if (type === "Sphere") {
       return new SphereGeometry(0.2, 32, 32);
@@ -23,7 +21,14 @@ const Shapes = ({ type, index, posCoordinate,currCamera,currCanvas,updatedPositi
   const [isDragging, setIsDragging] = useState(false);
   const [wantToColor,setWantToColor]=useState(false);
   const [lastColor,setLastColor]=useState("");
-  
+  useEffect(()=>{
+    if(selectedShapeId&&selectedShapeId!=0&&selectedShapeId==id){
+      setIsDragging(true);
+    }
+    else{
+      setIsDragging(false);
+    }
+  },[selectedShapeId])
 
   useEffect(()=>{
     if(isDragging){

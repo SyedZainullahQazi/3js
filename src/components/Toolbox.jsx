@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Vector3 } from 'three';
+import React, { useState } from "react";
+import { Vector3 } from "three";
 
-const ToolBox = ({ handleTool, handlePosition,handleColor}) => {
-  const [position, setPosition] = useState(new Vector3(0, 0, 0));
-  const [inputs, setInputs] = useState({ x: '', y: '', z: '' });
-  const [color, setColor] = useState('#ffffff'); // Initial color value
+const ToolBox = ({ handleTool, handlePosition, handleColor, shapes,handleSelectedShapeId }) => {
+  const [inputs, setInputs] = useState({ x: "", y: "", z: "" });
+  const [color, setColor] = useState("#ffffff"); 
+  const [selectedShape, setSelectedShape] = useState(""); 
 
   const handleButtonClick = (value) => {
     handleTool(value);
@@ -23,6 +23,11 @@ const ToolBox = ({ handleTool, handlePosition,handleColor}) => {
     handleColor(e.target.value);
   };
 
+  const handleShapeChange = (e) => {
+    handleSelectedShapeId(e.target.value)
+    setSelectedShape(e.target.value);
+  };
+
   const handleSubmit = () => {
     const { x, y, z } = inputs;
 
@@ -39,52 +44,73 @@ const ToolBox = ({ handleTool, handlePosition,handleColor}) => {
   };
 
   return (
-    <div id="controls" className="flex justify-center gap-x-4">
-      <button onClick={() => handleButtonClick('Sphere')}>Sphere</button>
-      <button onClick={() => handleButtonClick('Box')}>Box</button>
-      <button onClick={() => handleButtonClick('Octahedral')}>Octahedral</button>
+    <div id="controls" className="flex justify-center gap-x-4 mb-2">
+      <button onClick={() => handleButtonClick("Sphere")}>Sphere</button>
+      <button onClick={() => handleButtonClick("Box")}>Box</button>
+      <button onClick={() => handleButtonClick("Octahedral")}>
+        Octahedral
+      </button>
 
       {/* Input fields for position */}
-      <div>
-        <label>
-          X:
+      <div className="flex gap-x-2 items-center">
+        <div>
+          <label>X:</label>
           <input
             type="number"
             name="x"
             value={inputs.x}
             onChange={handleChange}
+            className="w-16"
           />
-        </label>
-        <label>
-          Y:
+        </div>
+        <div>
+          <label>Y:</label>
           <input
             type="number"
             name="y"
             value={inputs.y}
             onChange={handleChange}
+            className="w-16"
           />
-        </label>
-        <label>
-          Z:
+        </div>
+        <div>
+          <label>Z:</label>
           <input
             type="number"
             name="z"
             value={inputs.z}
             onChange={handleChange}
+            className="w-16"
           />
-        </label>
-
-        {/* Color picker */}
-        <label>
-          Color:
-          <input
-            type="color"
-            value={color}
-            onChange={handleColorChange}
-          />
-        </label>
+        </div>
 
         <button onClick={handleSubmit}>Submit</button>
+
+        {/* Color picker */}
+        <label className="ml-2">Color:</label>
+        <input type="color" value={color} onChange={handleColorChange} />
+
+        {/* Shape selection */}
+        <label className="ml-2">Choose A Model:</label>
+        <select
+          id="shapes"
+          name="shapes"
+          value={selectedShape}
+          onChange={handleShapeChange}
+          className="w-24"
+        >
+          <option value="0">UnSelect</option>
+          {shapes && shapes.length > 0 ? (
+            shapes.map((shape, index) => (
+              <option key={index} value={shape[4]}>
+                {shape[3]}
+              </option>
+            ))
+          ) : (
+            <option value="">No shapes available</option>
+          )}
+          
+        </select>
       </div>
     </div>
   );
