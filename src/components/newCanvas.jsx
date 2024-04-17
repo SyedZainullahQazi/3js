@@ -8,7 +8,7 @@ import Shapes from './Shapes';
 import maptile from "../tile.jpeg"
 
 
-export default function NewScene({shape,updatedPosition,color}) {
+export default function NewScene({shape,updatedPosition,color,handleShapes,selectedShapeId}) {
   
   const [posCordinates, setPosCordinates] = useState([]);
   const mouse = new Vector2();
@@ -20,12 +20,9 @@ export default function NewScene({shape,updatedPosition,color}) {
   const orbitRef = useRef();
   const cameraRef = useRef();
   const canvasRef=useRef();
-
   useEffect(()=>{
-    console.log("called from new canvas");
-    console.log(color)
-  },[color])
-
+    handleShapes(posCordinates);
+  },[posCordinates])
   const handlePointerMissed = (event) => {
     if(shape){
     const canvas = canvasRef.current;
@@ -37,8 +34,9 @@ export default function NewScene({shape,updatedPosition,color}) {
     raycaster.setFromCamera(mouse, cameraRef.current);
     raycaster.ray.intersectPlane(plane, intersectionPoint);
 
-    if(intersectionPoint.y<0.5){intersectionPoint.y=0.5}
-    const updatedPost = [...posCordinates, [intersectionPoint.x, intersectionPoint.y, intersectionPoint.z,shape]];
+    if(intersectionPoint.y<0.5){intersectionPoint.y=0.20}
+    const id=posCordinates.length+1
+    const updatedPost = [...posCordinates, [intersectionPoint.x, intersectionPoint.y, intersectionPoint.z,shape,id]];
 
     setPosCordinates(updatedPost);
     }
@@ -54,12 +52,15 @@ export default function NewScene({shape,updatedPosition,color}) {
       <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 10, 0]} />
       {posCordinates.length > 0 && posCordinates.map((posCordinate, index) => (
           <Shapes key={index}
-           posCoordinate={posCordinate} 
+          posCoordinate={posCordinate} 
           type={posCordinate[3]} 
+          id={posCordinate[4]}
           color={color}
           updatedPosition={updatedPosition}
           currCamera={cameraRef.current}
-          currCanvas={canvasRef.current}/>
+          currCanvas={canvasRef.current}
+          selectedShapeId={selectedShapeId}
+          />
       ))}
        <ambientLight />
       <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}  >
